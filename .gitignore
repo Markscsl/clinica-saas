@@ -1,0 +1,6 @@
+# Pasta de cache do Visual Studio
+.vs/
+
+# Pastas de compilação (Build)
+[Bb]in/
+[Oo]bj/
