@@ -1,5 +1,6 @@
 ﻿using Clinica.Application.Pacientes.Commands.CriarPaciente;
 using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using ValidationException = FluentValidation.ValidationException;
 

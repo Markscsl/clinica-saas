@@ -2,6 +2,7 @@
 using Clinica.Application.Consultas.Commands.CancelarConsulta;
 using Clinica.Application.Consultas.Queries;
 using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
@@ -19,6 +20,7 @@ namespace Clinica.Api.Controllers
         }
 
         [HttpPost("agendar")]
+        [Authorize(Roles = "Admin,Secretaria")]
 
         public async Task<IActionResult> AgendarNovaConsutla([FromBody] AgendarNovaConsultaCommand command)
         {
@@ -37,6 +39,7 @@ namespace Clinica.Api.Controllers
         }
 
         [HttpPut("{id}/cancelar")]
+        [Authorize(Roles = "Admin,Secretaria")]
 
         public async Task<IActionResult> CancelarConsulta(Guid id)
         {
@@ -56,6 +59,7 @@ namespace Clinica.Api.Controllers
         }
 
         [HttpGet("{id}")]
+        [Authorize]
         public async Task<IActionResult> ObterConsultaPorId(Guid id)
         {
 

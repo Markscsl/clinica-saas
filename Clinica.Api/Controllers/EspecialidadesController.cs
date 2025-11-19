@@ -1,5 +1,7 @@
 ﻿using Clinica.Application.Especialidades.Commands.CriarEspecialidade;
+using Clinica.Application.Especialidades.Queries;
 using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
@@ -29,6 +31,15 @@ namespace Clinica.Api.Controllers
             {
                 return BadRequest(ex.Message);
             }
+        }
+
+        [HttpGet]
+        [Authorize]
+        public async Task<IActionResult> ListarTodas()
+        {
+            var resultado = await _mediator.Send(new ObterTodasEspecialidadesQuery());
+
+            return Ok(resultado);
         }
     }
 }

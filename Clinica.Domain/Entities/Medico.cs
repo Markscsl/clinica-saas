@@ -7,6 +7,8 @@
         public string Crm { get; set; }
         public Guid EspecialidadeId { get; private set; }
 
+        public virtual Especialidade? Especialidade { get; private set; }
+
         private Medico() { }
 
         public Medico(Guid id, string nome, string crm, Guid especialidadeId)

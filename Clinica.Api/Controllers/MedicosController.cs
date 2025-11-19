@@ -18,7 +18,7 @@ namespace Clinica.Api.Controllers
         }
 
         [HttpPost]
-        [Authorize]
+        [Authorize(Roles = "Admin")]
 
         public async Task<IActionResult> AdicionarMedico([FromBody] CriarMedicoCommand command)
         {

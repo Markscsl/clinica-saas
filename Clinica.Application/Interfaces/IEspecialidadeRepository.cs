@@ -5,5 +5,6 @@ namespace Clinica.Application.Interfaces
     public interface IEspecialidadeRepository
     {
         Task AdicionarAsync(Especialidade especialidade);
+        Task<IEnumerable<Especialidade>> ObterTodasAsync();
     }
 }

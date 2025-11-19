@@ -1,5 +1,6 @@
 ﻿using Clinica.Application.Interfaces;
 using Clinica.Domain.Entities;
+using Microsoft.EntityFrameworkCore;
 
 namespace Clinica.Infrastructure.Persistence.Repositories
 {
@@ -16,6 +17,14 @@ namespace Clinica.Infrastructure.Persistence.Repositories
         {
             await _context.Especialidades.AddAsync(especialidade);
             await _context.SaveChangesAsync();
+        }
+
+        public async Task<IEnumerable<Especialidade>> ObterTodasAsync()
+        {
+            return await _context.Especialidades
+                .AsNoTracking()
+                .OrderBy(e => e.Nome)
+                .ToListAsync();
         }
     }
 }

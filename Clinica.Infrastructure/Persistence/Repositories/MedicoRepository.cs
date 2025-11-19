@@ -1,5 +1,6 @@
 ﻿using Clinica.Application.Interfaces;
 using Clinica.Domain.Entities;
+using Microsoft.EntityFrameworkCore;
 
 namespace Clinica.Infrastructure.Persistence.Repositories
 {
@@ -22,6 +23,14 @@ namespace Clinica.Infrastructure.Persistence.Repositories
         public async Task<Medico?> ObterPorIdASync(Guid id)
         {
             return await _context.Medicos.FindAsync(id);
+        }
+
+        public async Task<IEnumerable<Medico>> ObterTodosAsync()
+        {
+            return await _context.Medicos
+                .AsNoTracking()
+                .Include(m => m.Especialidade)
+                .ToListAsync();
         }
     }
 }
