@@ -1,5 +1,6 @@
 ﻿using Clinica.Application.Medicos.Commands.CriarMedico;
 using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
@@ -17,6 +18,7 @@ namespace Clinica.Api.Controllers
         }
 
         [HttpPost]
+        [Authorize]
 
         public async Task<IActionResult> AdicionarMedico([FromBody] CriarMedicoCommand command)
         {
