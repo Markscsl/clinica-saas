@@ -17,17 +17,16 @@ export function removeToken(): void {
 }
 
 export const api = axios.create({
-  baseURL: import.meta.env.VITE_API_URL,
+  baseURL: import.meta.env.VITE_BASE_URL,
   timeout: 5000,
   headers: {
     'Content-Type': 'application/json',
-    'Access-Control-Allow-Origin': '*'
   },
 });
 
 api.interceptors.request.use(
   (config) => {
-    const token = localStorage.getItem('clinica_token');
+    const token = getToken();
     if (token) {
       config.headers.Authorization = `Bearer ${token}`;
     }

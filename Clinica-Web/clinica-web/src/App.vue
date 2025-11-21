@@ -4,5 +4,5 @@ import Environment from '@components/config/Environment.vue';
 
 <template>
   <Environment />
-  <router-view> </router-view>
+  <router-view/>
 </template>
