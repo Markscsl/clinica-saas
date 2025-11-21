@@ -4,7 +4,7 @@ using MediatR;
 
 namespace Clinica.Application.Especialidades.Queries
 {
-    public class ObterTodasEspecialidadesQueryHandler : IRequestHandler<ObterTodasEspecialidadesQuery, IEnumerable<EspecialidadeDto>
+    public class ObterTodasEspecialidadesQueryHandler : IRequestHandler<ObterTodasEspecialidadesQuery, IEnumerable<EspecialidadeDto>>
     {
         private readonly IEspecialidadeRepository _especialidadeRepository;
 
@@ -13,7 +13,7 @@ namespace Clinica.Application.Especialidades.Queries
             _especialidadeRepository = especialidadeRepository;
         }
 
-        public async Task<IEnumerable<EspecialidadeDto>> Handle(ObterTodasEspecialidadesQueryHandler request, CancellationToken cancellationToken)
+        public async Task<IEnumerable<EspecialidadeDto>> Handle(ObterTodasEspecialidadesQuery request, CancellationToken cancellationToken)
         {
             var lista = await _especialidadeRepository.ObterTodasAsync();
 

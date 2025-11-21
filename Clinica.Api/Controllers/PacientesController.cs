@@ -1,4 +1,5 @@
 ﻿using Clinica.Application.Pacientes.Commands.CriarPaciente;
+using Clinica.Application.Pacientes.Commands.Queries;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -35,6 +36,14 @@ namespace Clinica.Api.Controllers
             {
                 return BadRequest(ex.Message);
             }
+        }
+
+        [HttpGet]
+        [Authorize(Roles = "Admin, Secretaria")]
+        public async Task<IActionResult> ListarTodos()
+        {
+            var resultado = await _mediator.Send(new ObterTodosPacientesQuery());
+            return Ok(resultado);
         }
     }
 }

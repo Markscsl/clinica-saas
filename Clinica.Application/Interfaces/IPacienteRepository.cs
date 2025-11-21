@@ -7,5 +7,6 @@ namespace Clinica.Application.Interfaces
         Task AdicionarAsync(Paciente paciente);
         Task<Paciente?> ObterPorIdAsync(Guid id);
         Task AtualizarAsync(Paciente paciente); 
+        Task <IEnumerable<Paciente>> ObterTodosAsync();
     }
 }
