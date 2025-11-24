@@ -1,37 +1,62 @@
 <script setup lang="ts">
-import { useCounterStore } from '@/shared/stores/counter';
-const counterStore = useCounterStore();
+import { useAuthStore } from '@/shared/stores/auth.store';
+import { CalendarPlus, Stethoscope, Users, Activity } from 'lucide-vue-next';
+
+const auth = useAuthStore();
 </script>
 
 <template>
-  <main
-    class="min-h-screen flex flex-col justify-center items-center bg-gradient-to-br from-gray-50 to-gray-200 text-gray-800 font-sans animate-fade-in"
-  >
-    <h1 class="text-5xl font-extrabold text-gray-800 mb-8 tracking-tight animate-fade-in">
-      Minimal Front - WebSupply
-    </h1>
+  <div>
 
-    <p class="text-xl text-gray-600 mb-6 animate-fade-in delay-200">Hello World</p>
+    <section class="bg-white rounded-xl shadow-sm border border-gray-100 p-8">
+      <h3 class="text-2xl font-bold text-gray-800 mb-2">Bem-vindo ao Sistema de Gestão</h3>
+      <p class="text-gray-500 mb-6">Gerencie consultas, médicos, especialidades e pacientes de forma eficiente.</p>
+      
+      <div class="bg-blue-50 border border-blue-100 rounded-lg p-6 flex items-start gap-4">
+        <div class="bg-blue-600 p-2 rounded-full mt-1">
+          <Activity class="text-white w-5 h-5" />
+        </div>
+        <div>
+          <div class="mb-6">
+            <h4 class="font-bold text-xl text-gray-800">Sistema de Gestão de Clínica Médica</h4>
+            <p class="text-gray-600 text-sm">Plataforma completa para gerenciamento</p>
+          </div>
+          <p class="text-gray-600 text-sm mt-2">Use a navegação lateral para acessar as diferentes seções do sistema e gerenciar todas as operações da clínica.</p>
+        </div>
+      </div>
+    </section>
 
-    <div class="flex items-center space-x-4 mb-8 animate-fade-in delay-400">
-      <button
-        class="px-6 py-3 bg-gray-300 text-gray-700 rounded-lg shadow hover:bg-gray-400 hover:shadow-lg transition-all duration-300"
-        @click="counterStore.decrement"
-      >
-        Decrementar
-      </button>
-      <span class="text-4xl font-semibold text-gray-800">{{ counterStore.count }}</span>
-      <button
-        class="px-6 py-3 bg-blue-500 text-white rounded-lg shadow hover:bg-blue-600 hover:shadow-lg transition-all duration-300"
-        @click="counterStore.increment"
-      >
-        Incrementar
-      </button>
-    </div>
+    <section>
+      <h3 class="text-lg font-bold text-gray-800 mb-4 mt-4">Ações Rápidas</h3>
 
-    <footer class="text-sm text-gray-500 mt-10 animate-fade-in delay-600">
-      Developed by <strong class="text-gray-800">Pedro H. Costa</strong> &&
-      <strong class="text-gray-800">Aline Gallo</strong>
-    </footer>
-  </main>
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+
+        <RouterLink v-if="auth.isAdmin || auth.user?.role === 'Secretaria'" to="/agendar" 
+          class="bg-white p-6 rounded-xl shadow-sm border border-gray-100 hover:shadow-md transition-shadow group">
+          <div class="bg-blue-50 w-12 h-12 rounded-lg flex items-center justify-center mb-4 group-hover:bg-blue-600 transition-colors">
+            <CalendarPlus class="text-blue-600 w-6 h-6 group-hover:text-white transition-colors" />
+          </div>
+          <h4 class="font-bold text-gray-800 mb-2">Agendar Consulta</h4>
+          <p class="text-sm text-gray-500">Agende uma nova consulta para um paciente</p>
+        </RouterLink>
+
+        <RouterLink v-if="auth.isAdmin" to="/medicos" class="bg-white p-6 rounded-xl shadow-sm border border-gray-100 hover:shadow-md transition-shadow group">
+          <div class="bg-blue-50 w-12 h-12 rounded-lg flex items-center justify-center mb-4 group-hover:bg-blue-600 transition-colors">
+            <Stethoscope class="text-blue-600 w-6 h-6 group-hover:text-white transition-colors" />
+          </div>
+          <h4 class="font-bold text-gray-800 mb-2">Gerenciar Médicos</h4>
+          <p class="text-sm text-gray-500">Adicione o visualize médicos.</p>
+        </RouterLink>
+
+        <RouterLink to="/pacientes" v-if="auth.isAdmin || auth.user?.role === 'Secretaria'" 
+          class="bg-white p-6 rounded-xl shadow-sm border border-gray-100 hover:shadow-md transition-shadow group">
+          <div class="bg-blue-50 w-12 h-12 rounded-lg flex items-center justify-center mb-4 group-hover:bg-blue-600 transition-colors"> 
+            <Users class="text-blue-600 w-6 h-6 group-hover:text-white transition-colors"/>
+          </div>
+          <h4 class="font-bold text-gray-800 mb-2">Gerenciar Pacientes</h4>
+          <p class="text-sm text-gray-500">Visualize todos os pacientes cadastrados.</p>
+        </RouterLink>
+      </div>
+    </section>
+  </div>
 </template>
