@@ -25,12 +25,21 @@ namespace Clinica.Infrastructure.Persistence.Repositories
             return await _context.Medicos.FindAsync(id);
         }
 
-        public async Task<IEnumerable<Medico>> ObterTodosAsync()
+        public async Task<IEnumerable<Medico>> ObterTodosAsync(Guid? especialidadeId)
         {
-            return await _context.Medicos
+            var query = _context.Medicos
                 .AsNoTracking()
                 .Include(m => m.Especialidade)
-                .ToListAsync();
+                .AsQueryable();
+
+            if (especialidadeId.HasValue)
+            {
+                query = query
+                    .Where(m => m.EspecialidadeId == especialidadeId.Value);
+            }
+
+            return await query.ToListAsync();
         }
+
     }
 }

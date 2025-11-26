@@ -22,7 +22,18 @@ namespace Clinica.Infrastructure.Persistence.Repositories
         public async Task<Usuario?> ObterPorEmailAsync(string email)
         {
             return await _context.Usuarios
-                .FirstOrDefaultAsync(u =>  u.Email == email);
+                .FirstOrDefaultAsync(u => u.Email == email);
+        }
+
+        public async Task<Usuario?> ObterPorIdAsync(Guid id)
+        {
+            return await _context.Usuarios.FindAsync(id);
+        }
+
+        public async Task AtualizarAsync(Usuario usuario)
+        {
+            _context.Usuarios.Update(usuario);
+            await _context.SaveChangesAsync();
         }
     }
 }

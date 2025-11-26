@@ -6,7 +6,9 @@ namespace Clinica.Domain.Entities
     {
         public Guid Id { get; private set; }
         public Guid PacienteId { get; private set; }
+        public virtual Paciente? Paciente { get; private set; }
         public Guid MedicoId { get; private set; }
+        public virtual Medico? Medico { get; private set; }
         public DateTime DataHoraInicio { get; private set; }
         public TimeSpan Duracao { get; private set; }
         public StatusConsulta Status { get; private set; }

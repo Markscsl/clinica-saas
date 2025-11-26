@@ -15,7 +15,7 @@ namespace Clinica.Application.Medicos.Queries
 
         public async Task<IEnumerable<MedicoDto>> Handle(ObterTodosMedicosQuery request, CancellationToken cancellationToken)
         {
-            var medicos = await _medicoRepository.ObterTodosAsync();
+            var medicos = await _medicoRepository.ObterTodosAsync(request.EspecialidadeId);
 
             return medicos.Select(m => new MedicoDto
             (

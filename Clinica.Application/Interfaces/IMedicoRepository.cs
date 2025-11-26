@@ -6,6 +6,6 @@ namespace Clinica.Application.Interfaces
     {
         Task AdicionarAsync(Medico medico);
         Task<Medico?> ObterPorIdASync(Guid id);
-        Task<IEnumerable<Medico>> ObterTodosAsync();
+        Task<IEnumerable<Medico>> ObterTodosAsync(Guid? especialidadeId);
     }
 }

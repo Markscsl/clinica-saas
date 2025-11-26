@@ -23,5 +23,10 @@
             SenhaHash = senhaHash;
             Role = role;
         }
+
+        public void AlterarSenha(string novoHash)
+        {
+            SenhaHash = novoHash;
+        }
     }
 }

@@ -5,6 +5,7 @@ using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using System.Security.Claims;
 
 namespace Clinica.Api.Controllers
 {
@@ -73,6 +74,21 @@ namespace Clinica.Api.Controllers
             }
 
             return Ok(consulta);
+        }
+
+        [HttpGet("minhas")] 
+        [Authorize]
+        public async Task<IActionResult> ListarMinhas()
+        {
+            var userIdString = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+            var role = User.FindFirst(ClaimTypes.Role)?.Value;
+
+            if (string.IsNullOrEmpty(userIdString)) return Unauthorized();
+
+            var query = new ObterConsultasDoUsuarioQuery(Guid.Parse(userIdString), role);
+
+            var result = await _mediator.Send(query);
+            return Ok(result);
         }
     }
 }

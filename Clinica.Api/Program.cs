@@ -7,12 +7,13 @@ using Microsoft.EntityFrameworkCore;
 using FluentValidation;
 using Clinica.Application.Common.Behaviors;
 using MediatR;
-using Clinica.Application.Consultas.Commands.CriarPaciente;
+using Clinica.Application.Consultas.Commands;
 using Clinica.Infrastructure.Services;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using System.Text;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
+using Clinica.Application.Pacientes.Commands.CriarPaciente;
 
 
 var builder = WebApplication.CreateBuilder(args);
@@ -56,7 +57,7 @@ builder.Services.AddCors(options =>
     options.AddPolicy(name: myAllowSpecificOrigins,
         policy =>
         {
-            policy.WithOrigins("http://localhost:8080")
+            policy.WithOrigins("http://localhost:8080", "http://localhost:5173")
             .AllowAnyHeader()
             .AllowAnyMethod();
         });
@@ -99,10 +100,16 @@ builder.Services.AddScoped<IEspecialidadeRepository, EspecialidadeRepository>();
 builder.Services.AddScoped<IAuthService, AuthService>();
 builder.Services.AddScoped<IUsuarioRepository, UsuarioRepository>();
 builder.Services.AddScoped<ITokenService, TokenService>();
+builder.Services.AddScoped<IEmailService, SmtpEmailService>();
 
 builder.Services.AddControllers();
 
 var app = builder.Build();
+
+using (var scope = app.Services.CreateScope())
+{
+    await Clinica.Api.Data.DbInitializer.SeedAsync(app);
+}
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())

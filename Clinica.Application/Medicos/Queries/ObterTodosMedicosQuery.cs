@@ -3,5 +3,5 @@ using MediatR;
 
 namespace Clinica.Application.Medicos.Queries
 {
-    public record ObterTodosMedicosQuery() : IRequest<IEnumerable<MedicoDto>>;
+    public record ObterTodosMedicosQuery(Guid? EspecialidadeId) : IRequest<IEnumerable<MedicoDto>>;
 }

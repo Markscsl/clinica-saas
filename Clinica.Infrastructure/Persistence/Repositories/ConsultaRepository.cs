@@ -69,5 +69,30 @@ namespace Clinica.Infrastructure.Persistence.Repositories
 
             return await query.FirstOrDefaultAsync();
         }
+
+        public async Task<IEnumerable<Consulta>> ObterPorUsuarioAsync(Guid usuarioId, string role)
+        {
+            var query = _context.Consultas
+                .AsNoTracking()
+                .Include(c => c.Medico).ThenInclude(m => m.Especialidade)
+                .Include(c => c.Paciente)
+                .AsQueryable();
+
+            // Se for Paciente, traz as consultas DELE
+            if (role == "Paciente")
+            {
+                query = query.Where(c => c.PacienteId == usuarioId);
+            }
+            // Se for Médico, traz as consultas da agenda DELE
+            else if (role == "Medico")
+            {
+                query = query.Where(c => c.MedicoId == usuarioId);
+            }
+            // Se for Admin/Secretaria, traz TUDO (não filtra)
+
+            return await query
+                .OrderByDescending(c => c.DataHoraInicio)
+                .ToListAsync();
+        }
     }
 }

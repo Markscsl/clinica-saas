@@ -1,4 +1,5 @@
 ﻿using Clinica.Application.Medicos.Commands.CriarMedico;
+using Clinica.Application.Medicos.Queries;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
@@ -32,6 +33,17 @@ namespace Clinica.Api.Controllers
             {
                 return BadRequest(ex.Message);
             }
+        }
+
+        [HttpGet]
+        [Authorize]
+
+        public async Task<IActionResult> ListarTodos([FromQuery] Guid? especialidadeId)
+        {
+            var query = new ObterTodosMedicosQuery(especialidadeId);
+
+            var result = await _mediator.Send(query);
+            return Ok(result);
         }
     }
 }

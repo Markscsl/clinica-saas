@@ -49,18 +49,38 @@ namespace Clinica.Infrastructure.Services
             if (string.IsNullOrEmpty(cipherText))
                 return cipherText;
 
-            var cipherBytes = Convert.FromBase64String(cipherText);
-            using (var aes = Aes.Create())
+            try
             {
-                aes.Key = _key;
-                aes.IV = _iv;
-                var decryptor = aes.CreateDecryptor(aes.Key, aes.IV);
-                using (var msDecrypt = new MemoryStream(cipherBytes))
-                using (var csDecrypt = new CryptoStream(msDecrypt, decryptor, CryptoStreamMode.Read))
-                using (var srDecrypt = new StreamReader(csDecrypt))
+                var cipherBytes = Convert.FromBase64String(cipherText);
+
+                using (var aes = Aes.Create())
                 {
-                    return srDecrypt.ReadToEnd();
+                    aes.Key = _key;
+                    aes.IV = _iv;
+
+                    var decryptor = aes.CreateDecryptor(aes.Key, aes.IV);
+
+                    using (var msDecrypt = new MemoryStream(cipherBytes))
+                    {
+                        using (var csDecypt = new CryptoStream(msDecrypt, decryptor, CryptoStreamMode.Read))
+                        {
+                            using (var srDecrypt = new StreamReader(csDecypt))
+                            {
+                                return srDecrypt.ReadToEnd();
+                            }
+                        }
+                    }
                 }
+            }
+
+            catch (FormatException)
+            {
+                return cipherText;
+            }
+
+            catch (CryptographicException)
+            {
+                return cipherText;
             }
         }
     }

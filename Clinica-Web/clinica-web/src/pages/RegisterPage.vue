@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref } from 'vue';
+import { computed, ref } from 'vue';
 import { useRouter } from 'vue-router';
 import { api } from '@/shared/services/config/api.config';
 
@@ -13,6 +13,25 @@ const form = ref({
     senha: ''
 })
 
+const passwordRules = ref({
+    minLength: false,
+    hasNumber: false,
+    hasSpecial: false,
+    hasCapital: false
+})
+
+function validarSenha(event: Event) {
+    const input = event.target as HTMLInputElement
+    const val = input.value
+
+    form.value.senha = val
+
+    passwordRules.value.minLength = val.length >= 6
+    passwordRules.value.hasNumber = /\d/.test(val)
+    passwordRules.value.hasSpecial = /[!@#$%^&(),.?":{}|<>]/.test(val)
+    passwordRules.value.hasCapital = /[A-Z]/.test(val)
+}
+
 const errorMessage = ref('')
 const loading = ref(false)
 
@@ -21,7 +40,13 @@ async function handleRegister() {
     errorMessage.value = ''
 
     try {
-        await api.post('api/pacientes', form.value)
+
+        const payload = {
+            ...form.value,
+            cpf: form.value.cpf.replace(/\D/g, '')
+        }
+
+        await api.post('api/pacientes', payload)
 
         alert('Cadastro realizado com sucesso! Faça login.')
         router.push('/login')
@@ -37,6 +62,39 @@ async function handleRegister() {
 
 }
 
+function formatarCpf(event: Event) {
+    const input = event.target as HTMLInputElement
+
+    let v = input.value.replace(/\D/g, '')
+
+    if (v.length > 11) v = v.slice(0, 11)
+
+    v = v.replace(/(\d{3})(\d)/, '$1.$2')
+    v = v.replace(/(\d{3})(\d)/, '$1.$2')
+    v = v.replace(/(\d{3})(\d{1,2})$/, '$1-$2')
+
+    input.value = v
+    form.value.cpf = v
+}
+
+function formatarTel(event: Event) {
+    const input = event.target as HTMLInputElement
+
+    let v = input.value.replace(/\D/g, '')
+
+    if (v.length > 11) v = v.slice(0, 11)
+
+    v = v.replace(/^(\d{2})(\d)/, '($1) $2')
+    v = v.replace(/(\d{5})(\d)/, '$1-$2')
+
+
+    input.value = v
+    form.value.telefone = v
+}
+
+const formInvalido = computed(() => {
+    return loading.value || !passwordRules.value.minLength || !passwordRules.value.hasCapital || !passwordRules.value.hasSpecial || !passwordRules.value.hasNumber
+})
 </script>
 
 <template>
@@ -59,13 +117,13 @@ async function handleRegister() {
                 <div class="grid grid-cols-2 gap-4">
                     <div>
                         <label class="block font-medium text-gray-700">CPF</label>
-                        <input v-model="form.cpf" type="text" required class="input-padrao"
-                            placeholder="000.000.000-00" />
+                        <input @input="formatarCpf" maxlength="14" :value="form.cpf" type="text" required
+                            class="input-padrao" placeholder="000.000.000-00" />
                     </div>
                     <div>
                         <label class="block font-medium text-gray-700">Telefone</label>
-                        <input v-model="form.telefone" type="text" required class="input-padrao"
-                            placeholder="(00) 00000-0000" />
+                        <input @input="formatarTel" maxlength="15" :value="form.telefone" type="text" required
+                            class="input-padrao" placeholder="(00) 00000-0000" />
                     </div>
                 </div>
 
@@ -76,16 +134,34 @@ async function handleRegister() {
                 </div>
 
                 <div>
-                    <label class="block font-medium text-gray-700">Senha</label>
-                    <input v-model="form.senha" type="password" required class="input-padrao" placeholder="******" />
+                    <label class="block text-sm font-medium text-gray-700">Senha</label>
+
+                    <input :value="form.senha" @input="validarSenha" type="password" required
+                        class="mt-1 block w-full rounded-md border border-gray-300 p-2 focus:border-blue-500 focus:ring focus:ring-blue-200 outline-none"
+                        placeholder="******" />
+
+                    <div class="mt-2 text-xs space-y-1 transition-all duration-300">
+                        <p :class="passwordRules.minLength ? 'text-green-600 font-bold' : 'text-red-400'">
+                            <span v-if="passwordRules.minLength">✓</span> ○ Mínimo 6 caracteres
+                        </p>
+                        <p :class="passwordRules.hasNumber ? 'text-green-600 font-bold' : 'text-red-400'">
+                            <span v-if="passwordRules.hasNumber">✓</span> ○ Pelo menos um número
+                        </p>
+                        <p :class="passwordRules.hasSpecial ? 'text-green-600 font-bold' : 'text-red-400'">
+                            <span v-if="passwordRules.hasSpecial">✓</span> ○ Pelo menos um caractere especial (!@#$...)
+                        </p>
+                        <p :class="passwordRules.hasCapital ? 'text-green-600 font-bold' : 'text-red-400'">
+                            <span v-if="passwordRules.hasCapital">✓</span> ○ Pelo menos uma letra maiúscula
+                        </p>
+                    </div>
                 </div>
 
                 <div v-if="errorMessage" class="text-red-500 text-sm text-center bg-red-50 p-2 rounded">
                     {{ errorMessage }}
                 </div>
 
-                <button type="submit" :disabled="loading"
-                    class="mt-1 bg-blue-500 text-white p-2 rounded-xl w-full hover:scale-105 transition-all">
+                <button type="submit" :disabled="formInvalido"
+                    class="mt-1 bg-blue-500 text-white p-2 rounded-xl w-full hover:scale-105 transition-all disabled:bg-gray-300 disabled:cursor-not-allowed disabled:hover:scale-100 disabled:shadow-none">
                     {{ loading ? 'Cadastrando...' : 'Finalizar Cadastro' }}
                 </button>
             </form>

@@ -10,5 +10,6 @@ namespace Clinica.Application.Interfaces
         Task AtualizarAsync(Consulta consulta);
         Task<bool> ExisteConflitoDeHorarioAsync(Guid medicoId, DateTime dataHoraInicio);
         Task<ConsultaResponse?> ObterConsultaDtoPorIdAsync(Guid consultaId);
+        Task<IEnumerable<Consulta>> ObterPorUsuarioAsync(Guid usuarioId, string role);
     }
 }
