@@ -9,6 +9,7 @@ import AgendarPage from '@/pages/AgendarPage.vue';
 import MinhasConsultasPage from '@/pages/MinhasConsultasPage.vue';
 import EsqueciSenhaPage from '@/pages/EsqueciSenhaPage.vue';
 import RedefinirSenhaPage from '@/pages/RedefinirSenhaPage.vue';
+import EspecialidadesPage from '@/pages/EspecialidadesPage.vue';
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -56,6 +57,13 @@ const router = createRouter({
         {
           path: '/redefinir-senha',
           component: RedefinirSenhaPage
+        },
+
+        {
+          path: 'especialidades',
+          name: 'especialidades',
+          component: EspecialidadesPage,
+          meta: { roleRequired: 'Admin' }
         }
       ]
     }
