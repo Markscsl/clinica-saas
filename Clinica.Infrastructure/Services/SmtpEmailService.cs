@@ -19,19 +19,26 @@ namespace Clinica.Infrastructure.Services
         {
             var smtpHost = _configuration["EmailSettings:Host"];
             var smtpPort = int.Parse(_configuration["EmailSettings:Port"]);
-            var remetenteEmail = _configuration["EmailSettings:Email"];
-            var remetenteSenha = _configuration["EmailSettings:Password"];
+
+            var username = _configuration["EmailSettings:Username"];
+            var password = _configuration["EmailSettings:Password"];
+
+            var senderEmail = _configuration["EmailSettings:SenderEmail"];
+
+
+            //var remetenteEmail = _configuration["EmailSettings:Email"];
+            //var remetenteSenha = _configuration["EmailSettings:Password"];
 
             var smtpClient = new SmtpClient(smtpHost)
             {
                 Port = smtpPort,
-                Credentials = new NetworkCredential(remetenteEmail, remetenteSenha),
+                Credentials = new NetworkCredential(username, password),
                 EnableSsl = true
             };
 
             var mailMessage = new MailMessage
             {
-                From = new MailAddress(remetenteEmail, "Clinica Médica."),
+                From = new MailAddress(senderEmail, "Clinica Médica."),
                 Subject = assunto,
                 Body = mensagem,
                 IsBodyHtml = true

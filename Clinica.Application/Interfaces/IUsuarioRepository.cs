@@ -8,5 +8,6 @@ namespace Clinica.Application.Interfaces
         Task<Usuario?> ObterPorEmailAsync(string email);
         Task<Usuario?> ObterPorIdAsync(Guid id);
         Task AtualizarAsync(Usuario usuario);
+        Task<Usuario?> ObterPorTokenRecuperacaoAsync(string token);
     }
 }

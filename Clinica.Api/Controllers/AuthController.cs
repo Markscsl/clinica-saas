@@ -1,6 +1,8 @@
 ﻿using Clinica.Application.Auth.Commands.AlterarSenha;
 using Clinica.Application.Auth.Commands.LoginUsuario;
+using Clinica.Application.Auth.Commands.RedefinirSenha;
 using Clinica.Application.Auth.Commands.RegistrarUsuario;
+using Clinica.Application.Auth.Commands.SolicitarTrocaSenha;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
@@ -76,6 +78,30 @@ namespace Clinica.Api.Controllers
                 await _mediator.Send(alterarSenhaCommand);
 
                 return Ok(new { Message = "Senha alterada com sucesso! Verifique seu e-mail." });
+            }
+
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+
+        [HttpPost("esqueci-senha")]
+        [AllowAnonymous]
+        public async Task<IActionResult> EsqueciSenha([FromBody] SolicitarTrocaSenhaCommand command)
+        {
+            await _mediator.Send(command);
+            return Ok(new { Message = "Se o e-mail existir, o código foi enviado." });
+        }
+
+        [HttpPost("redefinir-senha")]
+        [AllowAnonymous]
+        public async Task<IActionResult> RedefinirSenha([FromBody] RedefinirSenhaCommand command)
+        {
+            try
+            {
+                await _mediator.Send(command);
+                return Ok(new { Message = "Senha alterada com sucesso!" });
             }
 
             catch (Exception ex)

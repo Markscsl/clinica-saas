@@ -6,7 +6,9 @@
         public string Email { get; private set; }
         public string SenhaHash { get; private set; }
         public string Role { get; private set; }
-        
+
+        public string? PasswordResetToken { get; private set; }
+        public DateTime? PasswordResetExpiry { get; private set; }
 
         private Usuario() { }
 
@@ -27,6 +29,25 @@
         public void AlterarSenha(string novoHash)
         {
             SenhaHash = novoHash;
+        }
+
+        public string GerarTokenRecuperacao()
+        {
+            var token = Guid.NewGuid().ToString().Substring(0, 6).ToUpper();
+
+            PasswordResetToken = token;
+
+            PasswordResetExpiry = DateTime.Now.AddMinutes(15);
+
+            return token;
+        }
+        
+        public void RedefinirSenha(string novaSenhaHash)
+        {
+            SenhaHash = novaSenhaHash;
+
+            PasswordResetToken = null;
+            PasswordResetExpiry = null;
         }
     }
 }

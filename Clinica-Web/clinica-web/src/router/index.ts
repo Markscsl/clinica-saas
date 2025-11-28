@@ -7,6 +7,8 @@ import MainLayout from '@/layouts/MainLayout.vue';
 import HomePage from '@/pages/HomePage.vue';
 import AgendarPage from '@/pages/AgendarPage.vue';
 import MinhasConsultasPage from '@/pages/MinhasConsultasPage.vue';
+import EsqueciSenhaPage from '@/pages/EsqueciSenhaPage.vue';
+import RedefinirSenhaPage from '@/pages/RedefinirSenhaPage.vue';
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -44,6 +46,16 @@ const router = createRouter({
           path: 'minhas-consultas',
           name: 'minhas-consultas',
           component: MinhasConsultasPage
+        },
+
+        {
+          path: '/esqueci-senha',
+          component: EsqueciSenhaPage
+        },
+
+        {
+          path: '/redefinir-senha',
+          component: RedefinirSenhaPage
         }
       ]
     }

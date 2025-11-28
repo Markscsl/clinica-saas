@@ -35,5 +35,10 @@ namespace Clinica.Infrastructure.Persistence.Repositories
             _context.Usuarios.Update(usuario);
             await _context.SaveChangesAsync();
         }
+
+        public async Task<Usuario?> ObterPorTokenRecuperacaoAsync(string token)
+        {
+            return await _context.Usuarios.FirstOrDefaultAsync(u => u.PasswordResetToken == token);
+        }
     }
 }
