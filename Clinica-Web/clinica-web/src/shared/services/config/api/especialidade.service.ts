@@ -8,7 +8,12 @@ export const EspecialidadeService = {
     },
 
     create: async (nome: string): Promise<string> => {
-        const { data } = await api.post('/api/especialidades', { nome });
+        const payload = {
+            nome: nome,
+            descricao: 'Cadastrado pelo Painel Web'
+        };
+
+        const { data } = await api.post('/api/especialidades', payload);
         return data;
     }
 }

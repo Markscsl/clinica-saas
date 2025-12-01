@@ -10,6 +10,7 @@ import MinhasConsultasPage from '@/pages/MinhasConsultasPage.vue';
 import EsqueciSenhaPage from '@/pages/EsqueciSenhaPage.vue';
 import RedefinirSenhaPage from '@/pages/RedefinirSenhaPage.vue';
 import EspecialidadesPage from '@/pages/EspecialidadesPage.vue';
+import MedicosPage from '@/pages/admin/MedicosPage.vue';
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -64,6 +65,12 @@ const router = createRouter({
           name: 'especialidades',
           component: EspecialidadesPage,
           meta: { roleRequired: 'Admin' }
+        },
+        
+        {
+          path: 'medicos',
+          name: 'medicos',
+          component: MedicosPage
         }
       ]
     }
